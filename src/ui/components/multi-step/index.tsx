@@ -20,6 +20,7 @@ type MultiStepState = {
   currentStep: StepWithIndex;
   isFirstStep: boolean;
   isLastStep: boolean;
+  isCurrentStep: (stepIndex: number) => boolean;
   visitedStepIndexes: number[];
   goNext: () => void;
   goPrev: () => void;
@@ -35,7 +36,7 @@ export type MultiStepProps = {
 const MultiStepContext = createContext<MultiStepState | undefined>(undefined);
 
 const Timeline = () => {
-  const { steps, visitedStepIndexes, goToStep, currentStep } = useMultiStep();
+  const { steps, visitedStepIndexes, isCurrentStep, goToStep } = useMultiStep();
 
   return (
     <div style={{ display: "flex", gap: "8px", marginBottom: "20px" }}>
@@ -44,7 +45,7 @@ const Timeline = () => {
           <button
             type="button"
             style={{
-              color: step.index === currentStep.index ? "red" : "black",
+              color: isCurrentStep(step.index) ? "red" : "black",
             }}
             disabled={!visitedStepIndexes.includes(step.index)}
             onClick={() => goToStep(step.index)}
@@ -78,6 +79,11 @@ export const MultiStep = ({
   const isLastStep = useMemo(
     () => currentStepIndex === steps.length - 1,
     [currentStepIndex, steps]
+  );
+
+  const isCurrentStep = useCallback(
+    (stepIndex: number) => stepIndex === currentStepIndex,
+    [currentStepIndex]
   );
 
   const goNext = useCallback(() => {
@@ -122,6 +128,7 @@ export const MultiStep = ({
         currentStep,
         isFirstStep,
         isLastStep,
+        isCurrentStep,
         visitedStepIndexes,
         goNext,
         goPrev,
@@ -130,7 +137,7 @@ export const MultiStep = ({
     >
       <>
         {!hideTimeline && <Timeline />}
-        {steps[currentStepIndex].render()}
+        {steps[currentStepIndex]}
       </>
     </MultiStepContext.Provider>
   );
