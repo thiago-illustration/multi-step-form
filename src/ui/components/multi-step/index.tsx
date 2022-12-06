@@ -50,7 +50,7 @@ const Timeline = () => {
             disabled={!visitedStepIndexes.includes(step.index)}
             onClick={() => goToStep(step.index)}
           >
-            {step.title}
+            {step.title} {step.optional && "(optional)"}
           </button>
         </div>
       ))}
