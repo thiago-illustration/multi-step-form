@@ -10,7 +10,7 @@ import React, {
 type Step = {
   title: string;
   optional?: boolean;
-  render: () => React.ReactElement;
+  component: React.ReactElement;
 };
 
 type StepWithIndex = { index: number } & Step;
@@ -26,7 +26,7 @@ type MultiStepState = {
   goToStep: (stepIndex: number) => void;
 };
 
-type MultiStepProviderProps = {
+export type MultiStepProps = {
   steps: Step[];
   initialStepIndex?: number;
   hideTimeline?: boolean;
@@ -38,7 +38,7 @@ const Timeline = () => {
   const { steps, visitedStepIndexes, goToStep, currentStep } = useMultiStep();
 
   return (
-    <div style={{display: "flex", gap: "8px", marginBottom: "20px"}}>
+    <div style={{ display: "flex", gap: "8px", marginBottom: "20px" }}>
       {steps.map((step) => (
         <div key={step.index}>
           <button
@@ -61,7 +61,7 @@ export const MultiStep = ({
   steps,
   initialStepIndex = 0,
   hideTimeline,
-}: MultiStepProviderProps) => {
+}: MultiStepProps) => {
   const [currentStepIndex, setCurrentStepIndex] = useState(initialStepIndex);
   const [visitedStepIndexes, setVisitedStepIndexes] = useState<number[]>([]);
 
