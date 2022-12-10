@@ -8,7 +8,7 @@ import {
 } from "react-hook-form";
 
 export type FormProps<T extends FieldValues> = {
-  onSubmit: SubmitHandler<FieldValues>;
+  onSubmit: SubmitHandler<T>;
   methods: UseFormReturn<T, any>;
 };
 
